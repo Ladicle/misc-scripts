@@ -1,0 +1,6 @@
+#!/bin/bash
+
+status=$(pmset -g batt)
+echo "$status" | grep 'AC Power' >/dev/null && symbol='❤' || symbol='♡'
+value=$(echo "$status" | sed 1d | awk '{print $3}' | sed -e 's/;//')
+echo $symbol $value
