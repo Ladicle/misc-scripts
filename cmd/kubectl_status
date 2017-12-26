@@ -1,0 +1,14 @@
+#!/bin/bash
+
+config=$KUBECONFIG
+
+[ -z "$config" ] && config="$HOME/.kube/config"
+[ ! -f $config ] && exit 1
+
+ctx=$(kubectl config current-context 2>/dev/null)
+[[ $? -ne 0 ]] && exit 1
+
+ns=$(kubectl config view -o "jsonpath={.contexts[?(@.name==\"$context\")].context.namespace}")
+[ -z $ns ] && ns='default'
+
+echo "$ctx/$ns"
