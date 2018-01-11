@@ -5,10 +5,10 @@ config=$KUBECONFIG
 [ -z "$config" ] && config="$HOME/.bp/config"
 [ ! -f $config ] && { echo "not exist"; exit 1; }
 
-ctx=$(kubectl config current-context 2>/dev/null)
+current=$(bpctl contexts list|grep '*')
 [[ $? -ne 0 ]] && exit 1
 
-ns=$(kubectl config view -o "jsonpath={.contexts[?(@.name==\"$context\")].context.namespace}")
-[ -z $ns ] && ns='default'
+ctx=$(echo "$current"|awk '{print $2}')
+ns=$(echo "$current"|awk '{print $3}')
 
 echo "$ctx/$ns"
